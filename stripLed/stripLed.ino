@@ -6,8 +6,14 @@
 #define pin4 8
 #define nLed 15
 #define b1 7
+#define b2 6
+#define b3 5
+#define b4 4
 
 bool b1ON = false;
+bool b2ON = false;
+bool b3ON = false;
+bool b4ON = false;
 
 const int GREEN = 1;
 const int RED = 2;
@@ -17,25 +23,28 @@ Thread tButtons = Thread();
 
 Adafruit_NeoPixel strip1(nLed, pin1, NEO_GRB);
 Adafruit_NeoPixel strip2(nLed, pin2, NEO_GRB);
-//Adafruit_NeoPixel strip3(nLed, pin3, NEO_GRB);
-//Adafruit_NeoPixel strip4(nLed, pin4, NEO_GRB);
+Adafruit_NeoPixel strip3(nLed, pin3, NEO_GRB);
+Adafruit_NeoPixel strip4(nLed, pin4, NEO_GRB);
 
 int v1[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int v2[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//int v3[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//int v4[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int v3[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int v4[15] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 void setup() {
   Serial.begin(57600);
   pinMode (b1,INPUT);
+  pinMode (b2,INPUT);
+  pinMode (b3,INPUT);
+  pinMode (b4,INPUT);
   strip1.setBrightness(100);
   strip1.begin();
   strip2.setBrightness(100);
   strip2.begin();
-//  strip3.setBrightness(100);
-//  strip3.begin();
-//  strip4.setBrightness(100);
-//  strip4.begin();
+  strip3.setBrightness(100);
+  strip3.begin();
+  strip4.setBrightness(100);
+  strip4.begin();
   tButtons.setInterval(1);
   tButtons.onRun(controllaBottoni);
 }
@@ -47,19 +56,39 @@ void controllaBottoni(){
    }else if(digitalRead(b1) == LOW && b1ON == true){
       Serial.print('a');
       b1ON = false;
+    
+   if(digitalRead(b2) == HIGH && b2ON == false){
+      Serial.print('B');
+      b1ON = true;
+   }else if(digitalRead(b2) == LOW && b2ON == true){
+      Serial.print('b');
+      b1ON = false;
+    
+   if(digitalRead(b3) == HIGH && b3ON == false){
+      Serial.print('C');
+      b1ON = true;
+   }else if(digitalRead(b3) == LOW && b3ON == true){
+      Serial.print('c');
+      b1ON = false;
+    
+   if(digitalRead(b4) == HIGH && b4ON == false){
+      Serial.print('D');
+      b1ON = true;
+   }else if(digitalRead(b4) == LOW && b4ON == true){
+      Serial.print('d');
+      b1ON = false;
    }
 }
 
 void loop() {
-  
-  
   int var = 0;
-  while(Serial.available()<1)if(tButtons.shouldRun())tButtons.run();
+  
+  while(Serial.available()<1) if(tButtons.shouldRun()) tButtons.run();
   
   var = Serial.read();
-//  v4[0] = var%4;
+  v4[0] = var%4;
   var /= 4;
-//  v3[0] = var%4;
+  v3[0] = var%4;
   var /= 4;
   v2[0] = var%4;
   var /= 4;
@@ -78,28 +107,28 @@ void loop() {
         else if(v2[i] == BLUE) strip2.setPixelColor(i,0,0,255);
         else if(v2[i] == 0) strip2.setPixelColor(i,0,0,0); 
         strip2.show();
-//        if(v3[i] == GREEN) strip3.setPixelColor(i,255,0,0);
-//        else if(v3[i] == RED) strip3.setPixelColor(i,0,255,0); 
-//        else if(v3[i] == BLUE) strip3.setPixelColor(i,0,0,255);
-//        else if(v3[i] == 0) strip3.setPixelColor(i,0,0,0); 
-//        strip3.show();
-//        if(v4[i] == GREEN) strip4.setPixelColor(i,255,0,0);
-//        else if(v4[i] == RED) strip4.setPixelColor(i,0,255,0); 
-//        else if(v4[i] == BLUE) strip4.setPixelColor(i,0,0,255);
-//        else if(v4[i] == 0) strip4.setPixelColor(i,0,0,0); 
-//        strip4.show();
+        if(v3[i] == GREEN) strip3.setPixelColor(i,255,0,0);
+        else if(v3[i] == RED) strip3.setPixelColor(i,0,255,0); 
+        else if(v3[i] == BLUE) strip3.setPixelColor(i,0,0,255);
+        else if(v3[i] == 0) strip3.setPixelColor(i,0,0,0); 
+        strip3.show(); 
+        if(v4[i] == GREEN) strip4.setPixelColor(i,255,0,0);
+        else if(v4[i] == RED) strip4.setPixelColor(i,0,255,0); 
+        else if(v4[i] == BLUE) strip4.setPixelColor(i,0,0,255);
+        else if(v4[i] == 0) strip4.setPixelColor(i,0,0,0); 
+        strip4.show();
   }
   for (int i = 14; i > 0; i--)
     {
         v1[i] = v1[i - 1];
         v2[i] = v2[i - 1];
-//        v3[i] = v3[i - 1];
-//        v4[i] = v4[i - 1];
+        v3[i] = v3[i - 1];
+        v4[i] = v4[i - 1];
         
     }
     v1[0] = 0;  
     v2[0] = 0; 
-//    v3[0] = 0;  
-//    v4[0] = 0;
+    v3[0] = 0;  
+    v4[0] = 0;
   
 }
