@@ -56,34 +56,36 @@ void controllaBottoni(){
    }else if(digitalRead(b1) == LOW && b1ON == true){
       Serial.print('a');
       b1ON = false;
-    
+   }
    if(digitalRead(b2) == HIGH && b2ON == false){
       Serial.print('B');
-      b1ON = true;
+      b2ON = true;
    }else if(digitalRead(b2) == LOW && b2ON == true){
       Serial.print('b');
-      b1ON = false;
-    
+      b2ON = false;
+   } 
    if(digitalRead(b3) == HIGH && b3ON == false){
       Serial.print('C');
-      b1ON = true;
+      b3ON = true;
    }else if(digitalRead(b3) == LOW && b3ON == true){
       Serial.print('c');
-      b1ON = false;
-    
+      b3ON = false;
+   }
    if(digitalRead(b4) == HIGH && b4ON == false){
       Serial.print('D');
-      b1ON = true;
+      b4ON = true;
    }else if(digitalRead(b4) == LOW && b4ON == true){
       Serial.print('d');
-      b1ON = false;
+      b4ON = false;
    }
 }
+   
 
 void loop() {
-  int var = 0;
   
-  while(Serial.available()<1) if(tButtons.shouldRun()) tButtons.run();
+  
+  int var = 0;
+  while(Serial.available()<1)if(tButtons.shouldRun())tButtons.run();
   
   var = Serial.read();
   v4[0] = var%4;
